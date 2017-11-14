@@ -1,206 +1,191 @@
 #include "cute.h"
 #include "ide_listener.h"
 #include "cute_runner.h"
-#include "Crianca.h"
-#include "Jogo.h"
-
-#include <algorithm>
-using namespace std;
+#include "parque.h"
 
 
-void test_a_insereCrianca() {
-	Crianca c1("Rui",6);
-	Crianca c2("Ana",4);
-	Crianca c3("Rita",6);
-	Crianca c4("Joao",5);
-	Crianca c5("Marta",4);
-	Crianca c6("Vasco",5);
+void test_a_Pesquisa() {
+	ParqueEstacionamento p1(10,20);
+	p1.adicionaCliente("Joao Santos");
+	p1.adicionaCliente("Pedro Morais");
+	p1.adicionaCliente("Rui Silva");
+	p1.adicionaCliente("Susana Costa");
+	p1.adicionaCliente("Maria Tavares");
+	ASSERT_EQUAL(0, p1.posicaoCliente("Joao Santos"));
+	ASSERT_EQUAL(4, p1.posicaoCliente("Maria Tavares"));
+	ASSERT_EQUAL(1, p1.posicaoCliente("Pedro Morais"));
+	ASSERT_EQUAL(-1, p1.posicaoCliente("Tiago Tavares"));
+}
 
-	Jogo jogo1;
-	list<Crianca> cc = jogo1.getCriancasJogo();
-	ASSERT_EQUAL(0, cc.size());
+void test_b_UtilizacaoParque() {
+	ParqueEstacionamento p1(10,20);
+	p1.adicionaCliente("Joao Santos");
+	p1.adicionaCliente("Pedro Morais");
+	p1.adicionaCliente("Rui Silva");
+	p1.adicionaCliente("Susana Costa");
+	p1.adicionaCliente("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.entrar("Susana Costa");
+	p1.sair("Susana Costa");
+	p1.sair("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.sair("Maria Tavares");
+	p1.entrar("Rui Silva");
+	p1.sair("Rui Silva");
+	p1.entrar("Susana Costa");
+	p1.entrar("Rui Silva");
+	p1.sair("Rui Silva");
+	p1.entrar("Rui Silva");
+	p1.entrar("Pedro Morais");
+	ASSERT_EQUAL(3, p1.getFrequencia("Rui Silva"));
+	ASSERT_EQUAL(1, p1.getFrequencia("Pedro Morais"));
+	ASSERT_EQUAL(0, p1.getFrequencia("Joao Santos"));
+	ASSERT_THROWS(p1.getFrequencia("Tiago Silva"), ClienteNaoExistente);
+	try {
+		p1.getFrequencia("Tiago Silva");
+	}
+	catch (ClienteNaoExistente &e) {
+		cout << "Apanhou excecao. Cliente nao existente: " << e.getNome() << endl;
+		ASSERT_EQUAL("Tiago Silva", e.getNome());
+	}
+}
 
-	jogo1.insereCrianca(c1);
-	jogo1.insereCrianca(c2);
-	jogo1.insereCrianca(c3);
-	jogo1.insereCrianca(c4);
-	jogo1.insereCrianca(c5);
-	jogo1.insereCrianca(c6);
+void test_c_OrdenaFrequencia() {
+	ParqueEstacionamento p1(10,20);
+	p1.adicionaCliente("Joao Santos");
+	p1.adicionaCliente("Pedro Morais");
+	p1.adicionaCliente("Rui Silva");
+	p1.adicionaCliente("Susana Costa");
+	p1.adicionaCliente("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.entrar("Susana Costa");
+	p1.sair("Susana Costa");
+	p1.sair("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.sair("Maria Tavares");
+	p1.entrar("Rui Silva");
+	p1.sair("Rui Silva");
+	p1.entrar("Susana Costa");
+	p1.entrar("Rui Silva");
+	p1.sair("Rui Silva");
+	p1.entrar("Rui Silva");
+	p1.entrar("Pedro Morais");
+	// Joao Santos: frequencia 0
+	// Pedro Morais: frequencia 1
+	// Maria Tavares: frequencia 2
+	// Susana Costa: frequencia 2
+	// Rui Silva: frequencia 3
+	p1.ordenaClientesPorFrequencia();
+	InfoCartao ic1=p1.getClientes()[2];
+	ASSERT_EQUAL("Susana Costa", ic1.nome);
+	ASSERT_EQUAL(2, ic1.frequencia);
+	InfoCartao ic2=p1.getClientes()[0];
+	ASSERT_EQUAL("Rui Silva", ic2.nome);
+	ASSERT_EQUAL(3, ic2.frequencia);
+}
 
-	cc = jogo1.getCriancasJogo();
-	ASSERT_EQUAL(6, cc.size());
-
-	Crianca c = cc.front();
-	ASSERT_EQUAL("Rui", c.getNome());
-	c = cc.back();
-	ASSERT_EQUAL("Vasco", c.getNome());
-
-	Jogo jogo2;
-	cc.clear();
-	cc.push_back(c1); cc.push_back(c2);
-	cc.push_back(c3); cc.push_back(c4);
-	jogo2.setCriancasJogo(cc);
-
-	cc = jogo2.getCriancasJogo();
-	ASSERT_EQUAL(4, cc.size());
-
-	c = cc.front();
-	ASSERT_EQUAL("Rui", c.getNome());
-	c = cc.back();
-	ASSERT_EQUAL("Joao", c.getNome());
+void test_d_GamasUso() {
+	ParqueEstacionamento p1(10,20);
+	p1.adicionaCliente("Joao Santos");
+	p1.adicionaCliente("Pedro Morais");
+	p1.adicionaCliente("Rui Silva");
+	p1.adicionaCliente("Susana Costa");
+	p1.adicionaCliente("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.entrar("Susana Costa");
+	p1.sair("Susana Costa");
+	p1.sair("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.sair("Maria Tavares");
+	p1.entrar("Rui Silva");
+	p1.sair("Rui Silva");
+	p1.entrar("Susana Costa");
+	p1.entrar("Rui Silva");
+	p1.sair("Rui Silva");
+	p1.entrar("Rui Silva");
+	p1.entrar("Pedro Morais");
+	// Joao Santos: frequencia 0
+	// Pedro Morais: frequencia 1
+	// Maria Tavares: frequencia 2
+	// Susana Costa: frequencia 2
+	// Rui Silva: frequencia 3
+	vector<string> clientes = p1.clientesGamaUso(2,3);
+	ASSERT_EQUAL(3,clientes.size());
+	ASSERT_EQUAL("Rui Silva", clientes[0]);
+	ASSERT_EQUAL("Maria Tavares", clientes[1]);
+	ASSERT_EQUAL("Susana Costa", clientes[2]);
 }
 
 
-void test_b_imprimeJogo(){
-	Jogo jogo1;
-	ASSERT_EQUAL("", jogo1.escreve());
-
-	Crianca c1("Rui",6);
-	Crianca c2("Ana",4);
-	Crianca c3("Vasco",5);
-	jogo1.insereCrianca(c1);
-	jogo1.insereCrianca(c2);
-	jogo1.insereCrianca(c3);
-	cout << jogo1.escreve();
-	ASSERT_EQUAL("Rui : 6\nAna : 4\nVasco : 5\n", jogo1.escreve());
+void test_e_OrdenaNome() {
+	ParqueEstacionamento p1(10,20);
+	p1.adicionaCliente("Joao Santos");
+	p1.adicionaCliente("Pedro Morais");
+	p1.adicionaCliente("Rui Silva");
+	p1.adicionaCliente("Susana Costa");
+	p1.adicionaCliente("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.entrar("Susana Costa");
+	p1.sair("Susana Costa");
+	p1.sair("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.sair("Maria Tavares");
+	p1.entrar("Rui Silva");
+	p1.sair("Rui Silva");
+	p1.entrar("Susana Costa");
+	p1.entrar("Rui Silva");
+	p1.sair("Rui Silva");
+	p1.entrar("Rui Silva");
+	p1.entrar("Pedro Morais");
+	p1.ordenaClientesPorNome();
+	InfoCartao ic1=p1.getClientes()[2];
+	ASSERT_EQUAL("Pedro Morais", ic1.nome);
+	InfoCartao ic2=p1.getClientes()[0];
+	ASSERT_EQUAL("Joao Santos", ic2.nome);
 }
 
-
-void test_c_perdeJogo(){
-	Crianca c1("Rui",6);
-	Crianca c2("Ana",4);
-	Crianca c3("Rita",6);
-	Crianca c4("Joao",5);
-	Crianca c5("Marta",4);
-	Crianca c6("Vasco",5);
-
-	Jogo jogo1;
-	jogo1.insereCrianca(c1);
-	jogo1.insereCrianca(c2);
-	jogo1.insereCrianca(c3);
-	jogo1.insereCrianca(c4);
-	jogo1.insereCrianca(c5);
-	jogo1.insereCrianca(c6);
-
-	string s = "Pim Pam Pum cada bola mata um pra galinha e pro peru quem se livra es mesmo tu";
-	Crianca cx = jogo1.perdeJogo(s);
-	ASSERT_EQUAL("Rui", cx.getNome());
-}
-
-
-void test_d_inverteJogo(){
-	Crianca c1("Rui",6);
-	Crianca c2("Vasco",5);
-	Crianca c3("Ana",4);
-	Crianca c4("Joao",5);
-	Crianca c5("Marta",4);
-	Crianca c6("Rita",6);
-
-	Jogo jogo1;
-	jogo1.insereCrianca(c1);
-	jogo1.insereCrianca(c2);
-	jogo1.insereCrianca(c3);
-	jogo1.insereCrianca(c4);
-	jogo1.insereCrianca(c5);
-	jogo1.insereCrianca(c6);
-
-	ASSERT_EQUAL("Rui", jogo1.getCriancasJogo().front().getNome());
-	ASSERT_EQUAL("Rita", jogo1.getCriancasJogo().back().getNome());
-
-	list<Crianca> invertida = jogo1.inverte();
-	ASSERT_EQUAL("Rita", invertida.front().getNome());
-	ASSERT_EQUAL("Rui", invertida.back().getNome());
-}
-
-void test_e_divideJogo(){
-	Crianca c1("Rui",6);
-	Crianca c2("Ana",4);
-	Crianca c3("Rita",3);
-	Crianca c4("Joao",5);
-	Crianca c5("Marta",7);
-	Crianca c6("Vasco",5);
-	Jogo jogo1;
-	jogo1.insereCrianca(c1);
-	jogo1.insereCrianca(c2);
-	jogo1.insereCrianca(c3);
-	jogo1.insereCrianca(c4);
-	jogo1.insereCrianca(c5);
-	jogo1.insereCrianca(c6);
-
-	list<Crianca> dividida = jogo1.divide(5);
-	Jogo jogo2(dividida);
-	ASSERT_EQUAL("Rui : 6\nMarta : 7\n", jogo2.escreve());
-}
-
-void test_f_igualdadeJogo(){
-	list<Crianca> criancas1;
-	criancas1.push_back( Crianca("Rui",6) );
-	criancas1.push_back( Crianca("Ana",4) );
-	criancas1.push_back( Crianca("Rita",3) );
-	criancas1.push_back( Crianca("Joao",5) );
-	criancas1.push_back( Crianca("Marta",7) );
-	criancas1.push_back( Crianca("Vasco",5) );
-	criancas1.push_back( Crianca("Ines",5) );
-
-	Jogo jogo1(criancas1);
-	Jogo jogo2(criancas1);
-	ASSERT_EQUAL(true, jogo1 == jogo2);
-
-	list<Crianca> criancas2;
-	criancas2.push_back( Crianca("Rui",6) );
-	criancas2.push_back( Crianca("Ana",4) );
-	criancas2.push_back( Crianca("Rita",3) );
-	criancas2.push_back( Crianca("Maria",5) );
-	criancas2.push_back( Crianca("Marta",7) );
-	criancas2.push_back( Crianca("Vasco",5) );
-	criancas2.push_back( Crianca("Ines",5) );
-
-	jogo2.setCriancasJogo(criancas2);
-	ASSERT_EQUAL(false, jogo1 == jogo2);
-}
-
-void test_g_baralhaCriancas(){
-	list<Crianca> criancas;
-	criancas.push_back( Crianca("Rui",6) );
-	criancas.push_back( Crianca("Ana",4) );
-	criancas.push_back( Crianca("Rita",3) );
-	criancas.push_back( Crianca("Joao",5) );
-	criancas.push_back( Crianca("Marta",7) );
-	criancas.push_back( Crianca("Vasco",5) );
-	criancas.push_back( Crianca("Ines",5) );
-
-	Jogo jogo1;
-	jogo1.setCriancasJogo(criancas);
-
-	list<Crianca> criancas2 = jogo1.baralha();
-	ASSERT_EQUAL(7, criancas2.size());
-
-	list<Crianca>::iterator it;
-	it= find(criancas2.begin(), criancas2.end(),Crianca("Rui",6));
-	ASSERT_EQUAL("Rui", it->getNome());
-
-	it= find(criancas2.begin(), criancas2.end(),Crianca("Ines",5));
-	ASSERT_EQUAL("Ines", it->getNome());
-
-	Jogo jogo2(criancas2);
-	ASSERT_EQUAL(false, jogo1 == jogo2);
+void test_f_InfoClientes() {
+	ParqueEstacionamento p1(10,20);
+	p1.adicionaCliente("Joao Santos");
+	p1.adicionaCliente("Pedro Morais");
+	p1.adicionaCliente("Rui Silva");
+	p1.adicionaCliente("Susana Costa");
+	p1.adicionaCliente("Maria Tavares");
+	p1.entrar("Maria Tavares");
+	p1.entrar("Susana Costa");
+	p1.sair("Susana Costa");
+	p1.entrar("Rui Silva");
+	p1.entrar("Susana Costa");
+	ASSERTM("Este teste nunca falha! VERIFICAR informa��o escrita no monitor", true);
+	cout << p1;
+	InfoCartao ic=p1.getClienteAtPos(2);
+	ASSERT_EQUAL("Rui Silva", ic.nome);
+	ASSERT_THROWS(p1.getClienteAtPos(6), PosicaoNaoExistente);
+	try {
+		p1.getClienteAtPos(6);
+	}
+	catch (PosicaoNaoExistente &e) {
+		ASSERTM("Este teste nunca falha. Verifique no monitor a informacao", true);
+		cout << "Apanhou excecao. Posicao nao existente:" << e.getValor() << endl;
+		ASSERT_EQUAL(6, e.getValor());
+	}
 }
 
 
 void runSuite(){
 	cute::suite s;
-	s.push_back(CUTE(test_a_insereCrianca));
-	s.push_back(CUTE(test_b_imprimeJogo));
-	s.push_back(CUTE(test_c_perdeJogo));
-	s.push_back(CUTE(test_d_inverteJogo));
-	s.push_back(CUTE(test_e_divideJogo));
-	s.push_back(CUTE(test_f_igualdadeJogo));
-	s.push_back(CUTE(test_g_baralhaCriancas));
+	s.push_back(CUTE(test_a_Pesquisa));
+	s.push_back(CUTE(test_b_UtilizacaoParque));
+	s.push_back(CUTE(test_c_OrdenaFrequencia));
+	s.push_back(CUTE(test_d_GamasUso));
+	s.push_back(CUTE(test_e_OrdenaNome));
+	s.push_back(CUTE(test_f_InfoClientes));
 	cute::ide_listener<> lis;
-	cute::makeRunner(lis)(s, "AEDA 2017/2018 - Aula Pratica 6");
+	cute::makeRunner(lis)(s, "AEDA 2017/2018 - Aula Pratica 5");
 }
 
 int main(){
+
     runSuite();
     return 0;
 }
