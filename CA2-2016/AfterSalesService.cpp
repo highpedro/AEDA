@@ -13,7 +13,18 @@ using namespace std;
 
 bool cmpArt(Article * rhs, Article * lhs){
 
-	return rhs->getPresentNumber() < (lhs->getPresentNumber() +2);
+	if (!rhs->getDeliverHome() && lhs->getDeliverHome())
+		return true;
+	else if (rhs->getDeliverHome() && !lhs->getDeliverHome())
+		return false;
+	else if (!rhs->getDeliverHome() && !lhs->getDeliverHome()){
+
+		if (abs(rhs->getPresentNumber() - (lhs->getPresentNumber())) > 2)
+			return rhs->getPresentNumber() < lhs->getPresentNumber();
+
+	}
+
+	return rhs->getArrivalNumber() < lhs->getArrivalNumber();
 
 }
 
@@ -76,19 +87,7 @@ vector<Article*> AfterSalesService::pickPresentsFromTable(long client) {
  */
 void AfterSalesService::sortArticles() {
 
-	vector<Article *> deliverHome;
-	vector<Article *> priority;
-
-	for(size_t t = 0; t < (this->presentsTable.size() % 11); t++){
-
-		if (this->presentsTable.at(t)->getDeliverHome())
-			deliverHome.push_back(this->presentsTable.at(t));
-		else
-			priority.push_back(this->presentsTable.at(t));
-	}
-
-	sort(priority.begin(), priority.end(), cmpArt);
-
+	sort(this->presentsTable.begin(), this->presentsTable.begin()+10, cmpArt);
 }
 
 /**
@@ -96,7 +95,20 @@ void AfterSalesService::sortArticles() {
  */
 void AfterSalesService::enqueueArticles() {
 
-	// TODO
+
+
+	for (auto it = this->presentsTable.begin(); it != this->presentsTable.end();
+			it++) {
+
+		if (this->toWrap.size() < this->toWrapQueueSize) {
+			this->toWrap.push((*it));
+			this->presentsTable.erase(it);
+			it--;
+		}
+		else
+			break;
+
+	}
 
 }
 
@@ -104,10 +116,15 @@ void AfterSalesService::enqueueArticles() {
  * Process the first present to wrap. If it is an article to deliver home, the article is placed in the toDeliver queue.
  */
 Article* AfterSalesService::wrapNext() {
-
-	// TODO
-
-	return 0;
+	if (this->toWrap.front()->getDeliverHome()) {
+		this->toDeliver.push(this->toWrap.front());
+		this->toWrap.pop();
+		return NULL;
+	} else {
+		Article * toReturn = this->toWrap.front();
+		this->toWrap.pop();
+		return toReturn;
+	}
 
 }
 
