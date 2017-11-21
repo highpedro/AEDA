@@ -74,10 +74,13 @@ vector<Article*> Purchase::popPresents() {
 			(*it).pop();
 		}
 
+
 		while(!temp.empty()){
 			(*it).push(temp.top());
 			temp.pop();
 		}
+
+
 
 	}
 
