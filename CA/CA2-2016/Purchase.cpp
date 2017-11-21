@@ -9,14 +9,15 @@
 
 using namespace std;
 
-Purchase::Purchase(long cli) : client (cli) {
+Purchase::Purchase(long cli) :
+		client(cli) {
 }
 
 long Purchase::getClient() const {
 	return client;
 }
 
-list< stack<Article*> > Purchase::getBags() const {
+list<stack<Article*> > Purchase::getBags() const {
 	return bags;
 }
 
@@ -38,13 +39,10 @@ Article* Purchase::createArticle(long barCode, bool present, bool deliverHome) {
  */
 void Purchase::putInBag(Article* article) {
 
-
-
-	if ( this->bags.back().size() < this->BAG_SIZE){
+	if (this->bags.back().size() < this->BAG_SIZE) {
 		this->bags.back().push(article);
 		return;
-	}
-	else{
+	} else {
 		stack<Article *> last_one;
 		last_one.push(article);
 		this->bags.push_back(last_one);
@@ -65,7 +63,7 @@ vector<Article*> Purchase::popPresents() {
 
 		stack<Article *> temp;
 
-		while(!(*it).empty()) {
+		while (!(*it).empty()) {
 			if ((*it).top()->getPresent() == true) {  //it is a present
 				presents.push_back((*it).top());
 			} else {   //not a present
@@ -74,17 +72,13 @@ vector<Article*> Purchase::popPresents() {
 			(*it).pop();
 		}
 
-
-		while(!temp.empty()){
+		while (!temp.empty()) {
 			(*it).push(temp.top());
 			temp.pop();
 		}
-
-
 
 	}
 
 	return presents;
 
 }
-

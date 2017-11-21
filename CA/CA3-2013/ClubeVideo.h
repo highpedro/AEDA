@@ -9,6 +9,8 @@
 #include <ostream>
 #include <sstream>
 #include <algorithm>
+#include <iostream>
+
 using namespace std;
 
 class Filme {
@@ -31,9 +33,51 @@ public:
 	string getNome() const{ return nome; }
 	void addFilme(Filme umFilme){ filmesEmprestados.push(umFilme); }
 	stack<Filme> getFilmesEmprestados() const{ return filmesEmprestados; }
-	Filme devolver(string umTitulo);
+	Filme devolver(string umTitulo) {
+
+		stack<Filme> temp;
+
+		Filme toReturn  ("");
+
+
+
+		while(!this->filmesEmprestados.empty()){
+
+			if(this->filmesEmprestados.top().getTitulo() == umTitulo)
+				toReturn = this->filmesEmprestados.top();
+			else
+				temp.push(this->filmesEmprestados.top());
+
+			this->filmesEmprestados.pop();
+
+
+		}
+
+
+		if(temp.empty())
+			return toReturn;
+
+
+		while(!temp.empty()){
+			this->filmesEmprestados.push(temp.top());
+			temp.pop();
+		}
+
+
+		return toReturn;
+
+
+	}
 	bool operator==(const Cliente& c1) const{ return (this->nome == c1.nome); }
 	friend ostream& operator<<(ostream& os, const Cliente& c1);
+};
+
+class FilmeInexistente{
+private:
+	string titulo;
+public:
+	FilmeInexistente(string titulo) : titulo(titulo) {};
+	string msg() const {return "Titulo Inexistente: " + this->titulo;};
 };
 
 class PedidoCliente {
@@ -64,8 +108,8 @@ public:
 
 	bool existeCliente(string umNome) const;
 	bool existeFilme(string umTitulo) const;
-	string imprimirFilmes() const; //imprime todos; emprestados e não emprestados!
-	list<string> titulosDisponiveis() const; //lista dos títulos, não repetidos
+	string imprimirFilmes() const; //imprime todos; emprestados e nï¿½o emprestados!
+	list<string> titulosDisponiveis() const; //lista dos tï¿½tulos, nï¿½o repetidos
 	bool tituloDisponivel(string umTitulo) const;
 	string imprimirListaDeEspera() const;
 	void alugar(string umNome, string umTitulo); //

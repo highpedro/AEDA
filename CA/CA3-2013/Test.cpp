@@ -4,7 +4,7 @@
 #include "ClubeVideo.h"
 
 void test_a_existeCliente_existeFilme() {
-	/**
+
 	ClubeVideo vc;
 
 	Cliente c1("Joao");
@@ -53,11 +53,11 @@ void test_a_existeCliente_existeFilme() {
 
 	ASSERT_EQUAL(true, vc.existeFilme("True Lies"));
 	ASSERT_EQUAL(true, vc.existeFilme("Spider-Man"));
-	*/
+
 }
 
 void test_b_imprimirFilmes() {
-	/**
+
 	ClubeVideo vc1;
 
 	vc1.addFilme( Filme("Harry Potter") );
@@ -81,11 +81,11 @@ void test_b_imprimirFilmes() {
 	vc3.addCliente(c2);
 
 	ASSERT_EQUAL("Dune 0\nGodfather, The 0\nTop Gun 0\n", vc3.imprimirFilmes());
-	*/
+
 }
 
 void test_c_titulosDisponiveis() {
-	/**
+
 	ClubeVideo vc;
 	list<string> ls = vc.titulosDisponiveis();
 
@@ -118,11 +118,11 @@ void test_c_titulosDisponiveis() {
 	}
 
 	ASSERT_EQUAL("Batman\nGladiator\nHarry Potter\nMozart\n", ss.str());
-	*/
+
 }
 
 void test_d_tituloDisponivel() {
-	/**
+
 	ClubeVideo vc;
 
 	vc.addFilme( Filme("Harry Potter") );
@@ -142,11 +142,11 @@ void test_d_tituloDisponivel() {
 	vc.addCliente(c1);
 
 	ASSERT_EQUAL(false, vc.tituloDisponivel("We Were Soldiers"));
-	*/
+
 }
 
 void test_e_imprimirListaDeEspera() {
-	/**
+
 	ClubeVideo vc;
 
 	vc.addPedidoCliente(PedidoCliente("Joao", "Gladiator"));
@@ -162,11 +162,11 @@ void test_e_imprimirListaDeEspera() {
 	s2.erase( s2.find("Platoon\n"), 8 );
 
 	ASSERT_EQUAL( 0, s2.size() );
-	*/
+
 }
 
 void test_f_alugar() {
-	/**
+
 	ClubeVideo vc;
 
 	vc.addFilme( Filme("Saving Private Ryan") );
@@ -205,11 +205,11 @@ void test_f_alugar() {
 		string str = fie.msg();
 		ASSERT_EQUAL("Titulo Inexistente: Platoon", str);
 	}
-	*/
+
 }
 
 void test_g_devolver() {
-	/**
+
 	ClubeVideo vc;
 
 	vc.addFilme( Filme("Saving Private Ryan") );
@@ -218,6 +218,7 @@ void test_g_devolver() {
 	ASSERT_EQUAL(3, vc.numFilmes());
 	ASSERT_EQUAL(0, vc.numClientes());
 	ASSERT_EQUAL(0, vc.numPedidos());
+
 
 	vc.alugar("Francisco", "Pacific, The");
 	vc.alugar("Teresa", "Saving Private Ryan");
@@ -230,14 +231,20 @@ void test_g_devolver() {
 	ASSERT_EQUAL(0, vc.numFilmes());
 	ASSERT_EQUAL(1, vc.numPedidos());
 
+
 	vc.devolver("Francisco", "Pacific, The");
 	ASSERT_EQUAL(1, vc.numFilmes());
 	ASSERT_EQUAL(1, vc.numPedidos());
 
+
+
 	vc.devolver("Bartolomeu", "Band of Brothers");
 	ASSERT_EQUAL(1, vc.numFilmes());
 	ASSERT_EQUAL(0, vc.numPedidos());
-	*/
+
+
+	cout << "aqui4" << endl;
+
 }
 
 void runSuite() {
@@ -249,7 +256,7 @@ void runSuite() {
 	s.push_back(CUTE(test_e_imprimirListaDeEspera));
 	s.push_back(CUTE(test_f_alugar));
 	s.push_back(CUTE(test_g_devolver));
-	cute::ide_listener lis;
+	cute::ide_listener<> lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
 
