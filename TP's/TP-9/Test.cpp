@@ -110,6 +110,7 @@ void test_2c_JogadorApostasPremiadas(){
 	vals.push_back(17); vals.push_back(45); vals.push_back(8);
 	vals.push_back(30); vals.push_back(18); vals.push_back(24);
 	vals.push_back(22);
+	cout << "aqui" << endl;
 	Aposta ap1;
 	ap1.geraAposta(vals,6);
 	jogador1.adicionaAposta(ap1);
@@ -121,22 +122,28 @@ void test_2c_JogadorApostasPremiadas(){
 	ap2.geraAposta(vals,6);
 	jogador1.adicionaAposta(ap2);
 	vals.clear();
+	cout << "aqui" << endl;
 	vals.push_back(45); vals.push_back(32); vals.push_back(18);
 	vals.push_back(15); vals.push_back(8); vals.push_back(32);
 	vals.push_back(18); vals.push_back(45); vals.push_back(33);
 	Aposta ap3;
 	ap3.geraAposta(vals,6);
+	cout << "aqui" << endl;
 	jogador1.adicionaAposta(ap3);
+	cout << "aqui" << endl;
+	cout << "aqui" << endl;
 
 	vector<unsigned> valsF;
 	valsF.push_back(44); valsF.push_back(18); valsF.push_back(22);
 	valsF.push_back(33); valsF.push_back(45); valsF.push_back(8);
 	Aposta chave;
 	chave.geraAposta(valsF,6);
+	cout << "aqui" << endl;
 
 	ASSERT_EQUAL(4,ap1.calculaCertos(chave.getNumeros()));
 	ASSERT_EQUAL(1,ap2.calculaCertos(chave.getNumeros()));
 	ASSERT_EQUAL(4,ap3.calculaCertos(chave.getNumeros()));
+	cout << "aqui" << endl;
 
 	ASSERT_EQUAL(2,jogador1.apostasPremiadas(chave.getNumeros()).size());
 }

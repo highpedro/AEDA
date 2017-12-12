@@ -42,7 +42,7 @@ unsigned Caixa::getSize() const {
 
 
 ostream& operator<<(ostream& os, Objeto obj) {
-	os << "O" << obj.id << ": " << obj.peso;
+	os << "O" << obj.getID() << ": " << obj.getPeso();
 	return os;
 }
 
@@ -52,13 +52,13 @@ unsigned Caixa::ultimoId = 1;
 /* a implementar pelos estudantes */
 
 bool Objeto::operator<(const Objeto& o1) const {
-	// TODO
-	return true;
+
+	return this->peso < o1.peso;
+
 }
 
 bool Caixa::operator<(const Caixa& c1) const {
-	// TODO
-	return true;
+	return this->cargaLivre > c1.cargaLivre;
 }
 
 
